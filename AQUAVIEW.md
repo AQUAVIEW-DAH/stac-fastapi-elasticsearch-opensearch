@@ -14,15 +14,15 @@ This is AQUAVIEW's fork of [stac-fastapi-elasticsearch-opensearch](https://githu
 v<upstream-version>-aquaview.<patch-number>
 ```
 
-Examples: `v6.10.1-aquaview.1`, `v6.10.1-aquaview.2`
+Examples: `v8.0.0-aquaview.1`, `v8.0.0-aquaview.2`
 
 ## Deploy a new version
 
 Push a tag. Cloud Build does the rest.
 
 ```bash
-git tag v6.10.1-aquaview.2
-git push origin v6.10.1-aquaview.2
+git tag v8.0.0-aquaview.2
+git push origin v8.0.0-aquaview.2
 ```
 
 Monitor: https://console.cloud.google.com/cloud-build/builds?project=aquaview-461315
@@ -41,9 +41,9 @@ git checkout main
 git merge fix/describe-the-fix
 
 # 4. Tag and push
-git tag v6.10.1-aquaview.N
+git tag v8.0.0-aquaview.N
 git push origin main
-git push origin v6.10.1-aquaview.N
+git push origin v8.0.0-aquaview.N
 
 # 5. (Optional) Submit the fix as an upstream PR from the fix branch
 #    Keep the fix branch around until upstream merges it
@@ -89,9 +89,23 @@ When all fixes are merged upstream and we no longer need the fork:
 
 ## Current patches
 
-| Branch | Description | Upstream PR |
+Synced on top of upstream `v8.0.0`.
+
+| Commit | Description | Upstream PR |
 |--------|-------------|-------------|
-| `fix/es-api-key-auth` | Fix ES_API_KEY to use native api_key param | Pending |
+| `cloudbuild.yaml` | Cloud Build config for AQUAVIEW deployment | N/A (fork-only) |
+| `AQUAVIEW.md` | This file | N/A (fork-only) |
+| client.py | Add `centroid_geohex_grid_frequency` to `DEFAULT_AGGREGATIONS`, so the root `/aggregate` accepts it (the frontend explore map calls it with no `collections`) | To send: make the root `/aggregate` accept any aggregation the catalog can serve. Drop this patch when it lands |
+
+### Previously carried patches (now upstream or dropped)
+
+| Description | Upstream PR |
+|-------------|-------------|
+| Fix ES_API_KEY to use native api_key param | [#598](https://github.com/stac-utils/stac-fastapi-elasticsearch-opensearch/pull/598) (merged in v6.10.2) |
+| Catalogs-extension v0.1.3 / v0.2.0 cherry-picks for v6.16.0 boot crash | merged upstream, in v6.17.0+ (dropped on v6.19.0 sync) |
+| Stop double URL-decoding CQL2 filter on GET endpoints | [#783](https://github.com/stac-utils/stac-fastapi-elasticsearch-opensearch/pull/783) (merged in v6.17.2; dropped on v6.19.0 sync) |
+| `[catalogs]` extra in the deployment Dockerfile | upstream `Dockerfile.ci.es` installs it since v7 (dropped on v8.0.0 sync) |
+| `geometry_geohex_grid_frequency` aggregation (three commits) | [#705](https://github.com/stac-utils/stac-fastapi-elasticsearch-opensearch/pull/705) closed: needs a commercial ES license, no OpenSearch support, and nothing in AQUAVIEW calls it (dropped on v8.0.0 sync) |
 
 ## Files specific to this fork
 
